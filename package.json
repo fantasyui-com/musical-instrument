@@ -4,7 +4,8 @@
   "description": "Library of musical instrument samples compatible with tone. [Audio, Music]",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "browserify script.js -o script.browserify.js",
+    "watch": "chokidar \"script.js\" -c \"npm run build\""
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,13 @@
   },
   "homepage": "https://github.com/fantasyui-com/musical-instrument#readme",
   "dependencies": {
+    "chokidar-cli": "^1.2.1",
     "musical-notation": "^1.4.0",
-    "tone": "^0.12.80"
+    "tone": "^0.12.80",
+    "vue": "^2.5.17",
+    "vue-custom-element": "^3.2.5"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
   }
 }

@@ -8,11 +8,14 @@
   <meta name="author" content="">
   <link rel="icon" href="favicon.ico">
   <title>Musical Instrument</title>
+
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
   <!-- Custom styles for this template -->
   <link href="stylesheet.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -22,6 +25,8 @@
 <div class="container">
 
   <div class="row">
+
+
     <div class="col p-3">
       <form>
         <div class="form-group rounded border p-3 bg-light">
@@ -50,8 +55,36 @@
   </div>
 
   <div class="row">
+    <div class="col p-3">
+
+      <hr>
+      <widget-vue prop1="1" prop2="string" prop3="true"></widget-vue>
+      <hr>
+
+      <pre>
+        <code>
+          {
+            data:
+            {
+              drums:{},
+              bass:{},
+              chords:{},
+              melodies:{},
+            }
+          }
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <div class="row">
 
     <div class="col p-3">
+
+      <foo-moo title="drums">
+
+
+    <!-- component  -->
     <div class="card">
       <div class="card-header">
         Drums
@@ -89,6 +122,8 @@
       </div>
 
     </div>
+    <!-- /component  -->
+
     </div>
 
     <div class="col p-3">
@@ -165,6 +200,12 @@
   </main>
   <!-- /.container -->
 
+  <!-- Components core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/document-register-element/1.4.1/document-register-element.js"></script>
+  <script src="node_modules/vue-custom-element.js/dist/vue-custom-element.js"></script>
+
   <!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -175,7 +216,8 @@
   <!-- Player JavaScript
     ================================================== -->
   <script src="node_modules/tone/build/Tone.min.js"></script>
-  <script src="script.js"></script>
+
+  <script src="script.browserify.js"></script>
 
 
 </body>
