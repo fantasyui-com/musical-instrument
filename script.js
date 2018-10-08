@@ -1,14 +1,27 @@
-Vue.customElement('widget-vue', {
+const Vue  = require('vue');
+const wrap = require('@vue/web-component-wrapper');
+
+const Component = {
   props: [
     'prop1',
     'prop2',
     'prop3'
   ],
-  data: {
-    message: 'Hello Vue!'
+  data: function () {
+    return {
+      count: 0,
+      message: 'Hello Vue!'
+    }
   },
-  template: '<p>{{ message }}, {{ prop1  }}, {{prop2}}, {{prop3}}</p>'
-});
+
+  template: '<p>XXXXXX::::: {{ message }}, {{ prop1  }}, {{prop2}}, {{prop3}}</p>'
+}
+
+const CustomElement = wrap(Vue, Component)
+window.customElements.define('widget-vue', CustomElement)
+
+
+
 
 //
 //
