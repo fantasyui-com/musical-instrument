@@ -4,8 +4,8 @@
   "description": "Library of musical instrument samples compatible with tone. [Audio, Music]",
   "main": "index.js",
   "scripts": {
-    "build": "browserify script.js -o script.browserify.js",
-    "watch": "chokidar \"script.js\" -c \"npm run build\"",
+    "xxx": "browserify script.js -o script.browserify.js",
+    "yyy": "chokidar \"script.js\" -c \"npm run build\"",
     "serve": "hs -c-1 -o"
   },
   "repository": {

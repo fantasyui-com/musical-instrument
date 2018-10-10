@@ -1,10 +1,18 @@
-const Vue  = require('vue');
-const wrap = require('@vue/web-component-wrapper');
+import wrap from '../../node_modules/@vue/web-component-wrapper/dist/vue-wc-wrapper.js'
 
-const Component = {
+// <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+// <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+let customElementRegistry = window.customElements;
+
+customElementRegistry.define('my-element', wrap(Vue, {
+
+  template: '#audio-sequencer',
+
   props: [
-    'prop1',
-    'prop2',
+    'type',
+    'title',
     'prop3'
   ],
   data: function () {
@@ -14,14 +22,27 @@ const Component = {
     }
   },
 
-  template: '<p>XXXXXX::::: {{ message }}, {{ prop1  }}, {{prop2}}, {{prop3}}</p>'
+
+  created () {
+    console.log('created')
+  },
+  mounted () {
+    console.log('mounted')
+  },
+  activated () {
+    console.log('activated')
+  },
+  deactivated () {
+    console.log('deactivated')
+  }
+}))
+
+window.el = document.querySelector('my-element')
+
+
+export default function foo() {
+
 }
-
-const CustomElement = wrap(Vue, Component)
-window.customElements.define('widget-vue', CustomElement)
-
-
-
 
 //
 //
