@@ -61,84 +61,28 @@
 
 
       <pre>
-        <code>
-          {
-            data:
-            {
-              drums:{},
-              bass:{},
-              chords:{},
-              melodies:{},
-            }
-          }
+        <code id="code">
+          ...
         </code>
       </pre>
     </div>
   </div>
 
   <div class="row">
-
     <div class="col p-3">
-
-      <foo-moo title="drums">
-
-
-
-        <my-element type="drums" title="Drums" prop2="string" prop3="true"></my-element>
-
-
-
+      <audio-sequencer id="drums" type="drums" title="Drums" prop2="string" prop3="true"></audio-sequencer>
     </div>
-
     <div class="col p-3">
-    <div class="card">
-      <div class="card-header">
-        Bass
-      </div>
-      <div class="card-body">
-        <form>
-          <div class="form-group">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
-          </div>
-        </form>
-      </div>
+      <audio-sequencer id="bass" type="bass" title="Bass" prop2="string" prop3="true"></audio-sequencer>
     </div>
-    </div>
-
   </div>
   <div class="row">
-
     <div class="col p-3">
-    <div class="card">
-      <div class="card-header">
-        Chords
-      </div>
-      <div class="card-body">
-        <form>
-          <div class="form-group">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
-          </div>
-        </form>
-      </div>
+      <audio-sequencer id="chords" type="chords" title="Chords" prop2="string" prop3="true"></audio-sequencer>
     </div>
-    </div>
-
     <div class="col p-3">
-    <div class="card">
-      <div class="card-header">
-        Melodies
-      </div>
-      <div class="card-body">
-        <form>
-          <div class="form-group">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
-          </div>
-        </form>
-      </div>
+      <audio-sequencer id="melodies" type="melodies" title="Melodies" prop2="string" prop3="true"></audio-sequencer>
     </div>
-    </div>
-
-
   </div>
 
   <div class="row">
@@ -167,70 +111,101 @@
 
 
 
-  <!-- Player JavaScript
-    ================================================== -->
+  <!-- Player JavaScript ================================================== -->
   <script xsrc="node_modules/tone/build/Tone.min.js"></script>
 
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
   <script type="module">
     import foo from './modules/audio-sequencer/index.js';
+
+
+        const instruments = ['drums', 'bass', 'chords', 'melodies'];
+        const song = {
+            drums:{},
+            bass:{},
+            chords:{},
+            melodies:{},
+        };
+
+        const update = function(){
+          // ... //
+          const code = document.getElementById('code');
+          code.innerHTML = JSON.stringify(song, null, '  ');
+        }
+
+        const scrape = function(){
+
+          ['drums', 'bass', 'chords', 'melodies'].forEach(function(instrumentName){
+            const instrument = document.getElementById(instrumentName);
+            instrument._wrapper.$refs.inner.save();
+          });
+
+        }
+
+
+
+
+        window.onload = function(){
+
+          instruments.forEach(function(instrumentName){
+            const instrument = document.getElementById(instrumentName);
+            instrument.addEventListener('updated', function(input){
+              const data = input.detail[0];
+              song[instrumentName] = data;
+              update();
+            });
+          });
+
+          scrape();
+
+       }
+
+
+
+
   </script>
 
-  <!-- Bootstrap core JavaScript
-    ================================================== -->
+  <!-- Bootstrap core JavaScript ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
+  <script>
 
-  <!-- HTML Templates
-    ================================================== -->
+
+  </script>
+
+  <!-- HTML Templates ================================================== -->
+
+  <!-- audio-sequencer template placed in man page for customisability -->
 
   <template id="audio-sequencer">
 
-
-
-    <div class="card">
-
+    <div class="card" ref="foo">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></link>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
-
-
-
       <div class="card-header">
         {{title}}
-
-        <a class="float-right text-dark" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        <a class="float-right text-dark mx-1" v-on:click="expand()">
           <i class="fa fa-cog"></i>
         </a>
-
+        <a class="float-right text-dark mx-1" v-on:click="save()">
+          <i class="fa fa-save"></i>
+        </a>
       </div>
 
       <div class="card-body">
 
         <form>
           <div class="form-group">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="9">
-[----][-x--][----][-x--]
-[----][-x--][----][-x--]
-[-x--][-x--][-x--][-x--]
-[-x--][----][-x--][----]
-[-x--][----][-x--][----]</textarea>
+            <pre><textarea class="form-control" id="exampleFormControlTextarea1" rows="9" v-model="sequence"></textarea></pre>
           </div>
-        </form>
-
-        <div class="collapse" id="collapseExample">
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="9">
-/tonejs-examples/audio/505/agogoLow.[mp3|ogg]
-/tonejs-examples/audio/505/agogoHigh.[mp3|ogg]
-/tonejs-examples/audio/casio/A1.[mp3|ogg]
-/tonejs-examples/audio/casio/Cs2.[mp3|ogg]
-/tonejs-examples/audio/casio/E2.[mp3|ogg]
-/tonejs-examples/audio/casio/Fs2.[mp3|ogg]
-      </textarea>
+        <div v-bind:style="{ display: expanded?'block':'none' }" id="collapseExample">
+          <pre><textarea class="form-control" id="exampleFormControlTextarea1" rows="9" v-model="instruments">></textarea></pre>
         </div>
+        </form>
 
       </div>
 

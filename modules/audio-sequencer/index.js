@@ -6,7 +6,7 @@ import wrap from '../../node_modules/@vue/web-component-wrapper/dist/vue-wc-wrap
 
 let customElementRegistry = window.customElements;
 
-customElementRegistry.define('my-element', wrap(Vue, {
+customElementRegistry.define('audio-sequencer', wrap(Vue, {
 
   template: '#audio-sequencer',
 
@@ -15,29 +15,47 @@ customElementRegistry.define('my-element', wrap(Vue, {
     'title',
     'prop3'
   ],
+
   data: function () {
     return {
-      count: 0,
-      message: 'Hello Vue!'
+      sequence:'[-x--][-x--][----][-x--]\n[----][-x--][----][-x--]\n[-x--][-x--][-x--][-x--]\n[-x--][----][-x--][----]\n[-x--][----][-x--][----]\n',
+      instruments:'/tonejs-examples/audio/505/agogoLow.[mp3|ogg]\n/tonejs-examples/audio/505/agogoHigh.[mp3|ogg]\n/tonejs-examples/audio/casio/A1.[mp3|ogg]\n/tonejs-examples/audio/casio/Cs2.[mp3|ogg]\n/tonejs-examples/audio/casio/E2.[mp3|ogg]\n',
+
+      //UI State
+      loaded: false,
+      expanded: false,
     }
   },
 
+  methods: {
+
+    save: function (event) {
+      const {sequence, instruments} = this;
+      console.log('saving',{sequence, instruments})
+      this.$emit('updated',{sequence, instruments})
+    },
+
+    expand: function (event) {
+      this.expanded = !this.expanded;
+    }
+  },
 
   created () {
     console.log('created')
   },
   mounted () {
-    console.log('mounted')
+    console.log('mounted', this)
+    this.save();
   },
   activated () {
-    console.log('activated')
+    console.log('activated');
   },
   deactivated () {
     console.log('deactivated')
   }
 }))
 
-window.el = document.querySelector('my-element')
+window.el = document.querySelector('audio-sequencer')
 
 
 export default function foo() {
