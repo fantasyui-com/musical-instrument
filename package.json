@@ -22,8 +22,9 @@
   "dependencies": {
     "@vue/web-component-wrapper": "^1.2.0",
     "chokidar-cli": "^1.2.1",
+    "dibber": "^1.1.0",
     "http-server": "^0.11.1",
-    "musical-notation": "^1.4.0",
+    "musical-notation": "^2.0.0",
     "tone": "^0.12.80",
     "vue": "^2.5.17"
   },

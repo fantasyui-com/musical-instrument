@@ -1,5 +1,6 @@
 import wrap from '../../node_modules/@vue/web-component-wrapper/dist/vue-wc-wrapper.js';
-import musicalNotation from '../musical-notation/index.js';
+import musicalNotation from '../../node_modules/musical-notation/index.mjs';
+import dibber from '../../node_modules/dibber/index.mjs';
 
 // <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 // <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,10 +20,12 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
 
   data: function () {
     return {
+
+      // Data
       sequence:'[-x--][-x--][----][-x--]\n[----][-x--][----][-x--]\n[-x--][-x--][-x--][-x--]\n[-x--][----][-x--][----]\n[-x--][----][-x--][----]\n',
       instruments:'/tonejs-examples/audio/505/agogoLow.[mp3|ogg]\n/tonejs-examples/audio/505/agogoHigh.[mp3|ogg]\n/tonejs-examples/audio/casio/A1.[mp3|ogg]\n/tonejs-examples/audio/casio/Cs2.[mp3|ogg]\n/tonejs-examples/audio/casio/E2.[mp3|ogg]\n',
 
-      //UI State
+      // UI State
       loaded: false,
       expanded: false,
     }
@@ -31,13 +34,14 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
   methods: {
 
     save: function (event) {
+
       const {sequence, instruments} = this;
       console.log('saving',{sequence, instruments})
       this.$emit('updated',{
 
- 
+
         instruments:instruments.split(/\n/).map(i=>i.trim()).filter(i=>i),
-        sequence:musicalNotation(sequence)
+        sequence:dibber(musicalNotation(sequence))
       })
     },
 
