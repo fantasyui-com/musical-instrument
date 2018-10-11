@@ -15,14 +15,14 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
   props: [
     'type',
     'title',
-    'prop3'
+    'seq'
   ],
 
   data: function () {
     return {
 
       // Data
-      sequence:'[-x--][-x--][----][-x--]\n[----][-x--][----][-x--]\n[-x--][-x--][-x--][-x--]\n[-x--][----][-x--][----]\n[-x--][----][-x--][----]\n',
+      sequence:'[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n',
       instrument:'/tonejs-examples/audio/505/agogoLow.[mp3|ogg]\n/tonejs-examples/audio/505/agogoHigh.[mp3|ogg]\n/tonejs-examples/audio/casio/A1.[mp3|ogg]\n/tonejs-examples/audio/casio/Cs2.[mp3|ogg]\n/tonejs-examples/audio/casio/E2.[mp3|ogg]\n',
 
       // UI State
@@ -53,6 +53,7 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
   },
   mounted () {
     //console.log('mounted', this)
+    if(this.seq) this.sequence = this.seq.replace(/\\n/g,'\n')
     this.save();
   },
   activated () {

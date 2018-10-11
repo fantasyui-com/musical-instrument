@@ -60,18 +60,18 @@
       </div>
       <div class="row">
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="drums" type="drums" title="Drums" prop2="string" prop3="true"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="drums" type="drums" title="Drums" seq="[x---][x---][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="bass" type="bass" title="Bass" prop2="string" prop3="true"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="bass" type="bass" title="Bass" seq="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
       </div>
       <div class="row">
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="chords" type="chords" title="Chords" prop2="string" prop3="true"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="chords" type="chords" title="Chords" seq="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="melodies" type="melodies" title="Melodies" prop2="string" prop3="true"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="melodies" type="melodies" title="Melodies" seq="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
       </div>
       <div class="row">
@@ -95,11 +95,15 @@
   <!-- /.container -->
 
   <!-- Player JavaScript ================================================== -->
-  <script xsrc="node_modules/tone/build/Tone.min.js"></script>
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+  <script src="https://unpkg.com/tone"></script>
+  <script src="https://unpkg.com/vue"></script>
+
   <script type="module">
 
-    import foo from './modules/audio-sequencer/index.js';
+    import audioSequencer from './modules/audio-sequencer/index.js';
+    import play from './modules/audio-player/index.js';
+
     const ensemble = ['drums', 'bass', 'chords', 'melodies'];
     const song = {meta:{}, data:{}};
 
@@ -112,6 +116,11 @@
       const code = document.getElementById('code');
       code.innerHTML = JSON.stringify(song, null, '  ');
     }
+    window.playSongDisplay = function(){
+      const code = document.getElementById('code');
+      play(JSON.parse(code.innerHTML))
+    }
+
 
     const induceSave = function(){
       ensemble.forEach(function(instrumentName){
@@ -121,16 +130,18 @@
     }
 
     window.onload = function(){
+
       ensemble.forEach(function(instrumentName){
         const instrument = document.getElementById(instrumentName);
         instrument.addEventListener('updated', function(input){
           const data = input.detail[0];
           song.data[instrumentName].instrument = data.instrument;
           song.data[instrumentName].sequence = data.sequence; // NOTE: multiple sequences are stored here
-          updateSongDisplay();
+          //updateSongDisplay();
+          play(song);
         });
       });
-      induceSave();
+      //induceSave();
    }
 
   </script>
@@ -153,7 +164,7 @@
           <i class="fa fa-cog"></i>
         </a>
         <a class="float-right text-dark mx-1" v-on:click="save()">
-          <i class="fa fa-save"></i>
+          <i class="fa fa-play"></i>
         </a>
       </div>
       <div class="card-body">
