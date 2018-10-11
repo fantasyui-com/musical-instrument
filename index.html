@@ -22,148 +22,116 @@
 <body>
 
   <main role="main" class="container">
-
-<div class="container">
-
-  <div class="row">
-
-
-    <div class="col p-3">
-      <form>
-        <div class="form-group rounded border p-3 bg-light">
-          <label for="exampleFormControlInput1">Song Name</label>
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+    <div class="container">
+      <div class="row">
+        <div class="col p-3">
+          <form>
+            <div class="form-group rounded border p-3 bg-light">
+              <label for="exampleFormControlInput1">Song Name</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-    <div class="col p-3">
-      <form>
-        <div class="form-group rounded border p-3 bg-light">
-          <label for="exampleFormControlInput1">BPM</label>
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="100">
+        <div class="col p-3">
+          <form>
+            <div class="form-group rounded border p-3 bg-light">
+              <label for="exampleFormControlInput1">BPM</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="100">
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-
-    <div class="col p-3">
-      <form>
-        <div class="form-group rounded border p-3 bg-light">
-          <label for="exampleFormControlInput1">Control</label>
-          <button type="button" class="btn btn-primary form-control">Play</button>
+        <div class="col p-3">
+          <form>
+            <div class="form-group rounded border p-3 bg-light">
+              <label for="exampleFormControlInput1">Control</label>
+              <button type="button" class="btn btn-primary form-control">Play</button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col p-3">
-
-
-
-      <pre>
-        <code id="code">
-          ...
-        </code>
-      </pre>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col p-3">
-      <audio-sequencer id="drums" type="drums" title="Drums" prop2="string" prop3="true"></audio-sequencer>
-    </div>
-    <div class="col p-3">
-      <audio-sequencer id="bass" type="bass" title="Bass" prop2="string" prop3="true"></audio-sequencer>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col p-3">
-      <audio-sequencer id="chords" type="chords" title="Chords" prop2="string" prop3="true"></audio-sequencer>
-    </div>
-    <div class="col p-3">
-      <audio-sequencer id="melodies" type="melodies" title="Melodies" prop2="string" prop3="true"></audio-sequencer>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col p-3">
-    <div class="card">
-      <div class="card-header">
-        Notes
       </div>
-      <div class="card-body">
-        <form>
-          <div class="form-group">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
+      <div class="row">
+        <div class="col p-3">
+          <pre>
+            <code id="code">
+              ...
+            </code>
+          </pre>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col p-3">
+          <audio-sequencer class="ensemble" id="drums" type="drums" title="Drums" prop2="string" prop3="true"></audio-sequencer>
+        </div>
+        <div class="col p-3">
+          <audio-sequencer class="ensemble" id="bass" type="bass" title="Bass" prop2="string" prop3="true"></audio-sequencer>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col p-3">
+          <audio-sequencer class="ensemble" id="chords" type="chords" title="Chords" prop2="string" prop3="true"></audio-sequencer>
+        </div>
+        <div class="col p-3">
+          <audio-sequencer class="ensemble" id="melodies" type="melodies" title="Melodies" prop2="string" prop3="true"></audio-sequencer>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col p-3">
+        <div class="card">
+          <div class="card-header">
+            Notes
           </div>
-        </form>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
-    </div>
-  </div>
-
-</div>
-
-
   </main>
   <!-- /.container -->
 
-
-
-
   <!-- Player JavaScript ================================================== -->
   <script xsrc="node_modules/tone/build/Tone.min.js"></script>
-
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
-
   <script type="module">
 
     import foo from './modules/audio-sequencer/index.js';
+    const ensemble = ['drums', 'bass', 'chords', 'melodies'];
+    const song = {meta:{}, data:{}};
 
+    ensemble.reduce(function(accumulator, currentValue, currentIndex, array) {
+      accumulator.data[currentValue] = {instrument:[], sequence:[ /* NOTE: multiple sequences are stored here. */ ]};
+      return accumulator;
+    }, song);
 
-        const instruments = ['drums', 'bass', 'chords', 'melodies'];
-        const song = {
-            drums:{},
-            bass:{},
-            chords:{},
-            melodies:{},
-        };
+    const updateSongDisplay = function(){
+      const code = document.getElementById('code');
+      code.innerHTML = JSON.stringify(song, null, '  ');
+    }
 
-        const update = function(){
-          // ... //
-          const code = document.getElementById('code');
-          code.innerHTML = JSON.stringify(song, null, '  ');
-        }
+    const induceSave = function(){
+      ensemble.forEach(function(instrumentName){
+        const instrument = document.getElementById(instrumentName);
+        instrument._wrapper.$refs.inner.save();
+      });
+    }
 
-        const scrape = function(){
-
-          ['drums', 'bass', 'chords', 'melodies'].forEach(function(instrumentName){
-            const instrument = document.getElementById(instrumentName);
-            instrument._wrapper.$refs.inner.save();
-          });
-
-        }
-
-
-
-
-        window.onload = function(){
-
-          instruments.forEach(function(instrumentName){
-            const instrument = document.getElementById(instrumentName);
-            instrument.addEventListener('updated', function(input){
-              const data = input.detail[0];
-              song[instrumentName] = data;
-              update();
-            });
-          });
-
-          scrape();
-
-       }
-
-
-
+    window.onload = function(){
+      ensemble.forEach(function(instrumentName){
+        const instrument = document.getElementById(instrumentName);
+        instrument.addEventListener('updated', function(input){
+          const data = input.detail[0];
+          song.data[instrumentName].instrument = data.instrument;
+          song.data[instrumentName].sequence = data.sequence; // NOTE: multiple sequences are stored here
+          updateSongDisplay();
+        });
+      });
+      induceSave();
+   }
 
   </script>
 
@@ -173,21 +141,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-  <script>
-
-
-  </script>
-
   <!-- HTML Templates ================================================== -->
-
   <!-- audio-sequencer template placed in man page for customisability -->
-
   <template id="audio-sequencer">
-
     <div class="card" ref="foo">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></link>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-
       <div class="card-header">
         {{title}}
         <a class="float-right text-dark mx-1" v-on:click="expand()">
@@ -197,23 +156,17 @@
           <i class="fa fa-save"></i>
         </a>
       </div>
-
       <div class="card-body">
-
         <form>
           <div class="form-group">
             <pre><textarea class="form-control" id="exampleFormControlTextarea1" rows="9" v-model="sequence"></textarea></pre>
           </div>
         <div v-bind:style="{ display: expanded?'block':'none' }" id="collapseExample">
-          <pre><textarea class="form-control" id="exampleFormControlTextarea1" rows="9" v-model="instruments">></textarea></pre>
+          <pre><textarea class="form-control" id="exampleFormControlTextarea1" rows="9" v-model="instrument">></textarea></pre>
         </div>
         </form>
-
       </div>
-
     </div>
-
-
   </template>
 
 </body>

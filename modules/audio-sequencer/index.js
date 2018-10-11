@@ -23,7 +23,7 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
 
       // Data
       sequence:'[-x--][-x--][----][-x--]\n[----][-x--][----][-x--]\n[-x--][-x--][-x--][-x--]\n[-x--][----][-x--][----]\n[-x--][----][-x--][----]\n',
-      instruments:'/tonejs-examples/audio/505/agogoLow.[mp3|ogg]\n/tonejs-examples/audio/505/agogoHigh.[mp3|ogg]\n/tonejs-examples/audio/casio/A1.[mp3|ogg]\n/tonejs-examples/audio/casio/Cs2.[mp3|ogg]\n/tonejs-examples/audio/casio/E2.[mp3|ogg]\n',
+      instrument:'/tonejs-examples/audio/505/agogoLow.[mp3|ogg]\n/tonejs-examples/audio/505/agogoHigh.[mp3|ogg]\n/tonejs-examples/audio/casio/A1.[mp3|ogg]\n/tonejs-examples/audio/casio/Cs2.[mp3|ogg]\n/tonejs-examples/audio/casio/E2.[mp3|ogg]\n',
 
       // UI State
       loaded: false,
@@ -35,12 +35,10 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
 
     save: function (event) {
 
-      const {sequence, instruments} = this;
-      console.log('saving',{sequence, instruments})
+      const {sequence, instrument} = this;
+      //console.log('saving',{sequence, instrument})
       this.$emit('updated',{
-
-
-        instruments:instruments.split(/\n/).map(i=>i.trim()).filter(i=>i),
+        instrument:instrument.split(/\n/).map(i=>i.trim()).filter(i=>i),
         sequence:dibber(musicalNotation(sequence))
       })
     },
@@ -51,14 +49,14 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
   },
 
   created () {
-    console.log('created')
+    //console.log('created')
   },
   mounted () {
-    console.log('mounted', this)
+    //console.log('mounted', this)
     this.save();
   },
   activated () {
-    console.log('activated');
+    //console.log('activated');
   },
   deactivated () {
     console.log('deactivated')
