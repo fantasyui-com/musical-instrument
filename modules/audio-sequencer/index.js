@@ -15,7 +15,8 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
   props: [
     'type',
     'title',
-    'seq'
+    'pattern',
+    'audio',
   ],
 
   data: function () {
@@ -36,11 +37,26 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
     save: function (event) {
 
       const {sequence, instrument} = this;
-      //console.log('saving',{sequence, instrument})
+
+      // sequence needs to be split by \n\n
+
+      const sequences = sequence.split(/\n{2,}/)
+      .map(sequence=>musicalNotation(sequence.split('\n').filter(i=>!i.match(/^\s*\/\//)).join('\n')))
+      .map(sequence=>dibber(sequence))
+      .reduce(function(accumulator, currentValue) {
+        return accumulator.concat(currentValue);
+      }, [] );
+
+      console.log(sequences);
+
       this.$emit('updated',{
-        instrument:instrument.split(/\n/).map(i=>i.trim()).filter(i=>i),
-        sequence:dibber(musicalNotation(sequence))
+        instrument:instrument.split(/\n/).map(i=>i.trim()).filter(i=>i).filter(i=>!i.match(/^\s*\/\//))
+        ,
+        //sequence:dibber(musicalNotation(sequence))
+        sequence:sequences
       })
+
+
     },
 
     expand: function (event) {
@@ -53,7 +69,8 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
   },
   mounted () {
     //console.log('mounted', this)
-    if(this.seq) this.sequence = this.seq.replace(/\\n/g,'\n')
+    if(this.pattern) this.sequence = this.pattern.replace(/\\n|#/g,'\n').split("\n").map(i=>i.trim())  .join("\n")
+    if(this.audio) this.instrument = this.audio.replace(/\\n|#/g,'\n').split("\n").map(i=>i.trim())  .join("\n")
     this.save();
   },
   activated () {

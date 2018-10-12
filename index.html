@@ -44,7 +44,7 @@
           <form>
             <div class="form-group rounded border p-3 bg-light">
               <label for="exampleFormControlInput1">Control</label>
-              <button type="button" class="btn btn-primary form-control">Play</button>
+              <button id="play-button" type="button" class="btn btn-primary form-control">Play</button>
             </div>
           </form>
         </div>
@@ -52,26 +52,26 @@
       <div class="row">
         <div class="col p-3">
           <pre>
-            <code id="code">
-              ...
+            <code id="code" class="d-none">
+
+
             </code>
           </pre>
         </div>
       </div>
       <div class="row">
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="drums" type="drums" title="Drums" seq="[x---][x---][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
-        </div>
+          <audio-sequencer class="ensemble" id="drums" type="drums" title="Drums" pattern="// Primary # [----][xxxx][----][xxxx] # [xxxx][----][xxxx][----] # [xxx-][xxx-][xxx-][xxx-] ## // Seconday # [----][----][----][----] # [xxxx][----][xxxx][----] # [x-x-][x-x-][x-x-][x-x-] ## // Relax # [xxxx][xxxx][xxxx][xxxx] # [--xx][----][--xx][----] # [----][----][----][----] ## // Slowdown # [----][----][----][----] # [--xx][----][--xx][----] # [xxxx][xxxx][xxxx][xxxx] #" audio="/node_modules/ultrasonic/drum_bass_hard.flac # /node_modules/ultrasonic/bd_zome.flac # /node_modules/ultrasonic/drum_heavy_kick.flac"></audio-sequencer> </div>
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="bass" type="bass" title="Bass" seq="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="bass" type="bass" title="Bass" pattern="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
       </div>
       <div class="row">
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="chords" type="chords" title="Chords" seq="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="chords" type="chords" title="Chords" pattern="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
         <div class="col p-3">
-          <audio-sequencer class="ensemble" id="melodies" type="melodies" title="Melodies" seq="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
+          <audio-sequencer class="ensemble" id="melodies" type="melodies" title="Melodies" pattern="[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n[----][----][----][----]\n"></audio-sequencer>
         </div>
       </div>
       <div class="row">
@@ -131,15 +131,38 @@
 
     window.onload = function(){
 
+
+      const playButton = document.getElementById('play-button');
+      playButton.addEventListener('click', function(o){
+        induceSave();
+        updateSongDisplay();
+        playSongDisplay();
+      });
+
       ensemble.forEach(function(instrumentName){
         const instrument = document.getElementById(instrumentName);
+
         instrument.addEventListener('updated', function(input){
           const data = input.detail[0];
           song.data[instrumentName].instrument = data.instrument;
           song.data[instrumentName].sequence = data.sequence; // NOTE: multiple sequences are stored here
           //updateSongDisplay();
-          play(song);
+          //induceSave();
+          //play(song);
         });
+
+        // instrument.addEventListener('changed', function(input){
+        //
+        //   ensemble.forEach(function(instrumentName){
+        //     const instrument = document.getElementById(instrumentName);
+        //     instrument._wrapper.$refs.inner.save();
+        //   });
+        //
+        //   play(song);
+        //   //play(song);
+        // });
+
+
       });
       //induceSave();
    }
@@ -164,7 +187,7 @@
           <i class="fa fa-cog"></i>
         </a>
         <a class="float-right text-dark mx-1" v-on:click="save()">
-          <i class="fa fa-play"></i>
+          <i class="fa fa-save"></i>
         </a>
       </div>
       <div class="card-body">
