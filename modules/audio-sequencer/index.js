@@ -47,8 +47,7 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
         return accumulator.concat(currentValue);
       }, [] );
 
-      console.log(sequences);
-
+ 
       this.$emit('updated',{
         instrument:instrument.split(/\n/).map(i=>i.trim()).filter(i=>i).filter(i=>!i.match(/^\s*\/\//))
         ,

@@ -1,13 +1,10 @@
 // import dibber from '../../node_modules/dibber/index.mjs';
 // import * as foo from '../../node_modules/tone/build/Tone.js'
-let loop = {};
 function playInstrument(setup){
 
 
   const tonePlayers = {};
   const noteNames = [];
-
-  if(loop.stop) loop.stop(0);
 
   setup.instrument.forEach(function(sound, index){
     const noteName = 'sound'+index;
@@ -23,40 +20,48 @@ function playInstrument(setup){
 
   // when instruments load
     //setup a polyphonic sampler
-    let keys = new Tone.Players(tonePlayers, { volume: 10, fadeOut: "64n", onload: function(){
+    let playerKeys = new Tone.Players(tonePlayers, { volume: 10, fadeOut: "64n", onload: function(){
       //
       // console.log('INSTRUMENTS LOADED')
       // //keys.fadeOut.value = "64n";
 
       //the notes
+      const dataToLoopOver = Array.from({ length: matrix.length }, (x, i) => i);
+       const loop = new Tone.Sequence(function(time, columnNumber) {
 
-       loop = new Tone.Sequence(function(time, col) {
-        let column = matrix[col];
+        let columnData = matrix[columnNumber];
+
         for (let i = 0; i < noteNames.length; i++) {
-          if (column[i] === 1) {
+
+          if (columnData[i] === 1) {
             //slightly randomized velocities
-            let vel = Math.random() * 0.5 + 0.5;
-            keys.get(noteNames[i]).start(time, 0, "1n", 0, vel);
+            let randomizedVelocity = Math.random() * 0.5 + 0.5;
+            playerKeys.get(noteNames[i]).start(time, 0, "1n", 0, randomizedVelocity);
           }
         }
 
-
-      }, Array.from({ length: matrix.length }, (x, i) => i), "16n");
+      }, dataToLoopOver, "16n");
 
       Tone.Transport.bpm.value = 80;
       //Tone.Transport.sync().start(0);;
       Tone.Transport.start();
 
-      console.log('Loop Start was called')
       loop.start();
+      window.musicalInstrumentLoops.push(loop);
 
-      keys.sync().start(0)
+      playerKeys.sync().start(0);
+
   } }).toMaster();
 
 
 }
 
 export default function play(song) {
+  if(!window.musicalInstrumentLoops) window.musicalInstrumentLoops = [];
+
+  window.musicalInstrumentLoops.forEach(function(loop){
+    loop.stop();
+  });
 
   const ensemble = Object.keys(song.data);
 
