@@ -1,6 +1,6 @@
 {
   "name": "musical-instrument",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "Library of musical instrument samples compatible with tone. [Audio, Music]",
   "main": "index.js",
   "scripts": {
