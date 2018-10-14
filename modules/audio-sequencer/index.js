@@ -42,12 +42,12 @@ customElementRegistry.define('audio-sequencer', wrap(Vue, {
 
       const sequences = sequence.split(/\n{2,}/)
       .map(sequence=>musicalNotation(sequence.split('\n').filter(i=>!i.match(/^\s*\/\//)).join('\n')))
-      .map(sequence=>dibber(sequence))
+      .map(sequence=>dibber(sequence.reverse()))
       .reduce(function(accumulator, currentValue) {
         return accumulator.concat(currentValue);
       }, [] );
 
- 
+
       this.$emit('updated',{
         instrument:instrument.split(/\n/).map(i=>i.trim()).filter(i=>i).filter(i=>!i.match(/^\s*\/\//))
         ,
